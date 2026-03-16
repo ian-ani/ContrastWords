@@ -1,6 +1,6 @@
 #IfNDef __contrast_words_bi__
 #Define __contrast_words_bi__
-#inclib "../c/antonyms_utils"
+#inclib "antonyms_utils"
 
 ''void init_json(char *filename)
 Declare Sub init_json CDecl Alias "init_json" (ByVal filename As Any Ptr)
