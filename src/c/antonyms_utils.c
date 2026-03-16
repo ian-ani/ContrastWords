@@ -3,15 +3,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 // Constante con el nombre del archivo de antonimos
-const char kANTONYMS[] = "../data/antonyms_formatted.json";
+const char kANTONYMS[] = "../../data/antonyms_formatted.json";
 
 // Variable global que contiene todo el JSON para todo el archivo
 static cJSON *json_file = NULL;
 
 // Inicializar y guardar el JSON en la variable global
-void init_json(const char *filename) {
+void init_json(void) {
     // Abrir archivo
     FILE *fp = open_file(kANTONYMS);
 
@@ -26,7 +27,7 @@ void init_json(const char *filename) {
 }
 
 // Cerrar json
-void free_json() {
+void free_json(void) {
     if (json_file) {
         // Liberar puntero del JSON
         cJSON_Delete(json_file);
@@ -106,7 +107,7 @@ cJSON *parse_json(char *buffer) {
 }
 
 // Cuenta el numero de claves existentes en el archivo
-int get_number_keys() {
+int get_number_keys(void) {
     // Apunta al primer elemento del JSON
     cJSON *child = json_file->child;
 
@@ -126,9 +127,12 @@ int get_number_keys() {
 }
 
 // Obtiene una clave aleatoria para que el usuario diga un antonimo de esta
-char *get_random_key() {
+char *get_random_key(void) {
+    // Generar semilla
+    srand(time(NULL));
+
     // Obtener un indice
-    int index = rand() % get_number_keys(json_file);
+    int index = rand() % get_number_keys();
 
     // Apunta al primer elemento del JSON
     cJSON *child = json_file->child;
