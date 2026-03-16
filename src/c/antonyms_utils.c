@@ -1,5 +1,5 @@
 #include "antonyms_utils.h"
-#include "cJSON.h"
+#include "../../libs/cJSON.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

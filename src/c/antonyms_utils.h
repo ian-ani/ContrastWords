@@ -1,7 +1,7 @@
 #ifndef ANTONYMS_UTILS_H
 #define ANTONYMS_UTILS_H
 
-#include "cJSON.h"
+#include "../../libs/cJSON.h"
 #include <stdio.h>
 #include <string.h>
 
