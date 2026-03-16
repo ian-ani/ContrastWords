@@ -1,1 +1,11 @@
+# Editor
 .vscode
+
+# Objetos y ejecutables
+
+*.o
+*.exe
+
+# JSON sin formatear
+
+antonyms.json
