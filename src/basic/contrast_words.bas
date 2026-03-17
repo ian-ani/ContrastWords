@@ -2,26 +2,45 @@
 
 '' Constantes
 Const kSCORE = 200
+Const kWAIT = 2000
+Const kMAX_TRIES = 3
+Const kMIN_TRIES = 0
 
-'' Variables globales
+'' Variables globales de juego
+Const save_game As String = "save_game.txt"
+
+'' Variables globales de jugadores (maximas)
+Dim Shared hiscore As Integer = 0
+Dim Shared histreak As Integer = 0
+Dim Shared hiusername As String
+
+'' Variables globales de jugadores (actuales)
 Dim Shared score As Integer = 0
 Dim Shared streak As Integer = 0
+Dim Shared username As String
 
 '' Cabeceras
 Declare Sub MainMenu
 Declare Sub ReadPlayerChoice
 Declare Sub ShowHowToPlay
 Declare Sub ShowScore
+Declare Function CheckAntonym(ByVal key As ZString Ptr, ByVal player As String) As Boolean
+Declare Sub ReadScore
+Declare Sub WriteScore
 Declare Sub MainLoop
 Declare Sub InitGame
-Declare Function CheckAntonym(ByVal key As ZString Ptr, ByVal player As String) As Boolean
 
 '' Funciones
 Sub MainMenu
+    '' Substring con primera en mayus y el resto con cualquier case
+    Dim str_username As String = UCase(Mid(username, 1, 1)) & Mid(username, 2)
+
+    '' Titulo
     Print "============================"
-    Print "Welcome to Contrast Words!"
+    Print "Welcome " & str_username & " to Contrast Words!"
     Print "============================"
 
+    '' Opciones
     Print "[1] HOW TO PLAY"
     Print "[2] PLAY"
     Print "[3] SHOW HIGHEST SCORE AND STREAK"
@@ -36,10 +55,17 @@ Sub ReadPlayerChoice
     Dim choice As Integer
 
     Do
+        '' Limpiar pantalla
         Cls
+
+        '' Mostrar menu principal
         MainMenu
+
+        '' Leer eleccion del usuario
         Input "Choose an option: ", choice
 
+        '' TODO sacar a funcion?
+        '' Ejecutar opciones
         Select Case choice
         Case 1
             ShowHowToPlay
@@ -56,8 +82,11 @@ Sub ReadPlayerChoice
             Print "Goodbye! :)"
         Case Else
             Print "Not a valid option."
+            Sleep kWAIT
         End Select
     Loop While choice <> 4
+
+    WriteScore
 End Sub
 
 Sub ShowHowToPlay
@@ -72,8 +101,59 @@ End Sub
 
 Sub ShowScore
     Cls
+    Print "Username: "; UCase(hiusername)
+    Print "Highest streak: "; histreak
+    Print "High score: "; hiscore
+    Print "-----------------------------"
+    Print "Current username: "; UCase(username)
     Print "Current streak: "; streak
     Print "Current score: "; score
+End Sub
+
+Sub ReadScore
+    '' Numero de archivo disponible, evita conflictos con otros archivos abiertos
+    Dim F As Integer
+    F = FreeFile()
+
+    '' Linea
+    Dim a_line As String
+    Dim lines() As String
+    Dim length As Integer = 0
+
+    '' Abrir archivo y escribir
+    Open save_game For Input As #F
+        While Not Eof(F)
+            '' Leer linea
+            Line Input #F, a_line
+
+            '' Incrementar el largo
+            length += 1
+
+            '' Redimensionar array
+            ReDim Preserve lines(length - 1)
+
+            '' Guardar linea en la ultima posicion del array
+            lines(length - 1) = a_line
+        Wend
+    Close #F
+
+    '' Valores obtenidos
+    hiusername = lines(0)
+    hiscore = Val(lines(1))
+    histreak = Val(lines(2))
+End Sub
+
+Sub WriteScore
+    '' Numero de archivo disponible, evita conflictos con otros archivos abiertos
+    Dim F As Integer
+    F = FreeFile()
+
+    '' Abrir archivo y escribir
+    Open save_game For Output As #F
+        Print #F, UCase(hiusername)
+        Print #F, hiscore
+        Print #F, histreak
+    Close #F
 End Sub
 
 Function CheckAntonym(ByVal key As ZString Ptr, ByVal player As String) As Boolean
@@ -106,9 +186,10 @@ Function CheckAntonym(ByVal key As ZString Ptr, ByVal player As String) As Boole
 End Function
 
 Sub MainLoop
+    '' TODO: refactorizar esta funcion
     '' Variables del bucle
     Dim found As Boolean
-    Dim tries_left As Integer = 3
+    Dim tries_left As Integer = kMAX_TRIES
 
     '' Variables referentes a los valores
     Dim key As ZString Ptr
@@ -136,38 +217,60 @@ Sub MainLoop
         If found Then
             score += kSCORE * tries_left
             streak += 1
+
+            '' TODO otro metodo
+            '' Actualizar variables de puntuacion y racha mas alta
+            If score > hiscore Then 
+                hiscore = score
+                hiusername = username
+            End If
+
+            If streak > histreak Then
+                histreak = streak
+                hiusername = username
+            End If
+            ''
+
             Print "Found!"
-            Sleep 2000
+            Sleep kWAIT
         ElseIf tries_left > 1 Then
             tries_left -= 1
             Print "Wrong! Try again..."
-            Sleep 1000
+            Sleep kWAIT / 2
         ElseIf tries_left = 1 Then
             tries_left -= 1
         End If
-    Loop While tries_left > 0 And Not found
+    Loop While tries_left > kMIN_TRIES And Not found
 
+    '' TODO: puede ser una funcion
     '' Reinicio de propiedades
     If Not found Then
         Cls
         Print "GAME OVER"
-        Sleep 2000
+        Sleep kWAIT
         score = 0
         streak = 0
     End If
 End Sub
 
 Sub InitGame
+    '' Inicializar variables globales del juego
+    ReadScore
+
+    '' Inicializar variables globales de jugadores
+    Input "Username: ", username
+    score = 0
+    streak = 0
+
+    '' Inicializar JSON (desde C)
     init_json()
-    ''Cls
-    ''MainMenu
+
+    '' Leer eleccion del usuario
     ReadPlayerChoice
 End Sub
 
 '' Inicia el juego
 InitGame
 
-'' NOTA: mostrar tambien el hiscore, no solo el current
 '' NOTA: refactorizar un poco algunos bloques que se repiten
-'' NOTA: ver si puedo guardar en archivo
-'' NOTA: ver si puedo anadir un diccionario en castellano
+'' NOTA: anadir dibujos
