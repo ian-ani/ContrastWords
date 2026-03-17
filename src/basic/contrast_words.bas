@@ -8,6 +8,7 @@ Const kMIN_TRIES = 0
 
 '' Variables globales de juego
 Const save_game As String = "save_game.txt"
+Const wizard_img As String = "wizard.txt"
 
 '' Variables globales de jugadores (maximas)
 Dim Shared hiscore As Integer = 0
@@ -27,6 +28,7 @@ Declare Sub ShowScore
 Declare Function CheckAntonym(ByVal key As ZString Ptr, ByVal player As String) As Boolean
 Declare Sub ReadScore
 Declare Sub WriteScore
+Declare Sub PrintWizard
 Declare Sub MainLoop
 Declare Sub InitGame
 
@@ -34,6 +36,9 @@ Declare Sub InitGame
 Sub MainMenu
     '' Substring con primera en mayus y el resto con cualquier case
     Dim str_username As String = UCase(Mid(username, 1, 1)) & Mid(username, 2)
+
+    '' Mostrar imagen
+    PrintWizard
 
     '' Titulo
     Print "============================"
@@ -185,6 +190,26 @@ Function CheckAntonym(ByVal key As ZString Ptr, ByVal player As String) As Boole
     Return found
 End Function
 
+Sub PrintWizard
+    '' Numero de archivo disponible, evita conflictos con otros archivos abiertos
+    Dim F As Integer
+    F = FreeFile()
+
+    '' Linea
+    Dim txt As String
+
+    '' Abrir archivo y escribir
+    Open wizard_img For Input As #F
+        While Not Eof(F)
+            '' Leer linea
+            Line Input #F, txt
+
+            '' Dibujar linea
+            Print txt
+        Wend
+    Close #F
+End Sub
+
 Sub MainLoop
     '' TODO: refactorizar esta funcion
     '' Variables del bucle
@@ -231,14 +256,19 @@ Sub MainLoop
             End If
             ''
 
+            Beep
             Print "Found!"
             Sleep kWAIT
         ElseIf tries_left > 1 Then
             tries_left -= 1
+            Beep
+            Beep
             Print "Wrong! Try again..."
             Sleep kWAIT / 2
         ElseIf tries_left = 1 Then
             tries_left -= 1
+            Beep
+            Beep
         End If
     Loop While tries_left > kMIN_TRIES And Not found
 
