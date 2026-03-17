@@ -6,7 +6,7 @@
 #include <time.h>
 
 // Constante con el nombre del archivo de antonimos
-const char kANTONYMS[] = "../../data/antonyms_formatted.json";
+const char kANTONYMS[] = "antonyms_formatted.json";
 
 // Variable global que contiene todo el JSON para todo el archivo
 static cJSON *json_file = NULL;
