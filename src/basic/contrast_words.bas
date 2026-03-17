@@ -248,7 +248,6 @@ Sub RestartPlayer
 End Sub
 
 Sub MainLoop
-    '' TODO: refactorizar esta funcion
     '' Variables del bucle
     Dim found As Boolean
     Dim tries_left As Integer = kMAX_TRIES
@@ -329,5 +328,5 @@ End Sub
 '' Inicia el juego
 InitGame
 
-'' NOTA: refactorizar un poco algunos bloques que se repiten
+'' NOTA: refactorizar un poco algunos bloques que se repiten: MAIN LOOP principalmente lo necesita
 '' NOTA: anadir dibujos
