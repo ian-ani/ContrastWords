@@ -23,12 +23,16 @@ Dim Shared username As String
 '' Cabeceras
 Declare Sub MainMenu
 Declare Sub ReadPlayerChoice
+Declare Sub ExecPlayerChoice(ByVal choice As Integer)
 Declare Sub ShowHowToPlay
 Declare Sub ShowScore
 Declare Function CheckAntonym(ByVal key As ZString Ptr, ByVal player As String) As Boolean
 Declare Sub ReadScore
 Declare Sub WriteScore
 Declare Sub PrintWizard
+Declare Sub UpdateScore(ByVal tries_left As Integer)
+Declare Sub RestartScore
+Declare Sub RestartPlayer
 Declare Sub MainLoop
 Declare Sub InitGame
 
@@ -37,25 +41,22 @@ Sub MainMenu
     '' Substring con primera en mayus y el resto con cualquier case
     Dim str_username As String = UCase(Mid(username, 1, 1)) & Mid(username, 2)
 
-    '' Mostrar imagen
+    '' Mostrar imagen del mago
     PrintWizard
 
     '' Titulo
     Print "============================"
-    Print "Welcome " & str_username & " to Contrast Words!"
+    Print str_username & ", welcome to Contrast Words!"
     Print "============================"
 
     '' Opciones
     Print "[1] HOW TO PLAY"
     Print "[2] PLAY"
-    Print "[3] SHOW HIGHEST SCORE AND STREAK"
+    Print "[3] SHOW SCORE AND STREAK"
     Print "[4] EXIT"
 End Sub
 
 Sub ReadPlayerChoice
-    '' Esta variable no sirve para nada
-    Dim tmp As String
-
     '' Eleccion del usuario
     Dim choice As Integer
 
@@ -69,29 +70,35 @@ Sub ReadPlayerChoice
         '' Leer eleccion del usuario
         Input "Choose an option: ", choice
 
-        '' TODO sacar a funcion?
         '' Ejecutar opciones
-        Select Case choice
-        Case 1
-            ShowHowToPlay
-            Print ""
-            Input "Press any key... ", tmp
-        Case 2
-            MainLoop
-        Case 3
-            ShowScore
-            Print ""
-            Input "Press any key... ", tmp
-        Case 4
-            free_json
-            Print "Goodbye! :)"
-        Case Else
-            Print "Not a valid option."
-            Sleep kWAIT
-        End Select
+        ExecPlayerChoice(choice)
     Loop While choice <> 4
 
     WriteScore
+End Sub
+
+Sub ExecPlayerChoice(ByVal choice As Integer)
+    '' Esta variable solo sirve para consumir una tecla y no hacer nada con ella
+    Dim tmp As String
+
+    Select Case choice
+    Case 1
+        ShowHowToPlay
+        Print ""
+        Input "Press any key... ", tmp
+    Case 2
+        MainLoop
+    Case 3
+        ShowScore
+        Print ""
+        Input "Press any key... ", tmp
+    Case 4
+        free_json
+        Print "Goodbye! :)"
+    Case Else
+        Print "Not a valid option."
+        Sleep kWAIT
+    End Select
 End Sub
 
 Sub ShowHowToPlay
@@ -125,7 +132,7 @@ Sub ReadScore
     Dim lines() As String
     Dim length As Integer = 0
 
-    '' Abrir archivo y escribir
+    '' Abrir archivo y guardar linea en 'lines'
     Open save_game For Input As #F
         While Not Eof(F)
             '' Leer linea
@@ -210,6 +217,36 @@ Sub PrintWizard
     Close #F
 End Sub
 
+Sub UpdateScore(ByVal tries_left As Integer)
+    score += kSCORE * tries_left
+    streak += 1
+
+    If score > hiscore Then 
+        hiscore = score
+        hiusername = username
+    End If
+
+    If streak > histreak Then
+        histreak = streak
+        hiusername = username
+    End If
+End Sub
+
+Sub RestartScore
+    score = 0
+    streak = 0
+End Sub
+
+Sub RestartPlayer
+    '' Mostrar por pantalla
+    Cls
+    Print "GAME OVER"
+    Sleep kWAIT
+
+    '' Reinicio de propiedades
+    RestartScore
+End Sub
+
 Sub MainLoop
     '' TODO: refactorizar esta funcion
     '' Variables del bucle
@@ -240,47 +277,38 @@ Sub MainLoop
 
         '' Comprobar si el usuario ha escrito un antonimo correcto
         If found Then
-            score += kSCORE * tries_left
-            streak += 1
-
-            '' TODO otro metodo
             '' Actualizar variables de puntuacion y racha mas alta
-            If score > hiscore Then 
-                hiscore = score
-                hiusername = username
-            End If
+            UpdateScore(tries_left)
 
-            If streak > histreak Then
-                histreak = streak
-                hiusername = username
-            End If
-            ''
-
+            '' Sonido
             Beep
+
+            '' Mostrar por pantalla
             Print "Found!"
             Sleep kWAIT
         ElseIf tries_left > 1 Then
+            '' Decrementar intentos
             tries_left -= 1
+
+            '' Sonido
             Beep
             Beep
+
+            '' Mostrar por pantalla
             Print "Wrong! Try again..."
             Sleep kWAIT / 2
         ElseIf tries_left = 1 Then
+            '' Decrementar intentos
             tries_left -= 1
+
+            '' Sonido
             Beep
             Beep
         End If
     Loop While tries_left > kMIN_TRIES And Not found
 
-    '' TODO: puede ser una funcion
     '' Reinicio de propiedades
-    If Not found Then
-        Cls
-        Print "GAME OVER"
-        Sleep kWAIT
-        score = 0
-        streak = 0
-    End If
+    If Not found Then RestartPlayer End If
 End Sub
 
 Sub InitGame
@@ -288,9 +316,8 @@ Sub InitGame
     ReadScore
 
     '' Inicializar variables globales de jugadores
-    Input "Username: ", username
-    score = 0
-    streak = 0
+    Input "How should I address you? ", username
+    RestartScore
 
     '' Inicializar JSON (desde C)
     init_json()
