@@ -9,6 +9,9 @@ Const kMIN_TRIES = 0
 '' Variables globales de juego
 Const save_game As String = "save_game.txt"
 Const wizard_img As String = "wizard.txt"
+Const goodbye_img As String = "goodbye.txt"
+Const howto_img As String = "howto.txt"
+Const gameover_img As String = "gameover.txt"
 
 '' Variables globales de jugadores (maximas)
 Dim Shared hiscore As Integer = 0
@@ -29,7 +32,7 @@ Declare Sub ShowScore
 Declare Function CheckAntonym(ByVal key As ZString Ptr, ByVal player As String) As Boolean
 Declare Sub ReadScore
 Declare Sub WriteScore
-Declare Sub PrintWizard
+Declare Sub PrintImage(ByVal img As String)
 Declare Sub UpdateScore(ByVal tries_left As Integer)
 Declare Sub RestartScore
 Declare Sub RestartPlayer
@@ -42,7 +45,7 @@ Sub MainMenu
     Dim str_username As String = UCase(Mid(username, 1, 1)) & Mid(username, 2)
 
     '' Mostrar imagen del mago
-    PrintWizard
+    PrintImage(wizard_img)
 
     '' Titulo
     Print "============================"
@@ -62,7 +65,7 @@ Sub ReadPlayerChoice
 
     Do
         '' Limpiar pantalla
-        Cls
+        Shell "cls"
 
         '' Mostrar menu principal
         MainMenu
@@ -84,17 +87,19 @@ Sub ExecPlayerChoice(ByVal choice As Integer)
     Select Case choice
     Case 1
         ShowHowToPlay
-        Print ""
+        ''Print ""
         Input "Press any key... ", tmp
     Case 2
         MainLoop
     Case 3
         ShowScore
-        Print ""
+        ''Print ""
         Input "Press any key... ", tmp
     Case 4
         free_json
-        Print "Goodbye! :)"
+        Shell "cls"
+        PrintImage(goodbye_img)
+        Sleep kWAIT * 2
     Case Else
         Print "Not a valid option."
         Sleep kWAIT
@@ -102,17 +107,12 @@ Sub ExecPlayerChoice(ByVal choice As Integer)
 End Sub
 
 Sub ShowHowToPlay
-    Cls
-    Print "============="
-    Print "HOW TO PLAY"
-    Print "============="
-
-    Print "Words will be displayed, and you must say at least one antonym for each one."
-    Print "Don't lose your streak!"
+    Shell "cls"
+    PrintImage(howto_img)
 End Sub
 
 Sub ShowScore
-    Cls
+    Shell "cls"
     Print "Username: "; UCase(hiusername)
     Print "Highest streak: "; histreak
     Print "High score: "; hiscore
@@ -197,7 +197,7 @@ Function CheckAntonym(ByVal key As ZString Ptr, ByVal player As String) As Boole
     Return found
 End Function
 
-Sub PrintWizard
+Sub PrintImage(ByVal img As String)
     '' Numero de archivo disponible, evita conflictos con otros archivos abiertos
     Dim F As Integer
     F = FreeFile()
@@ -206,7 +206,7 @@ Sub PrintWizard
     Dim txt As String
 
     '' Abrir archivo y escribir
-    Open wizard_img For Input As #F
+    Open img For Input As #F
         While Not Eof(F)
             '' Leer linea
             Line Input #F, txt
@@ -239,8 +239,9 @@ End Sub
 
 Sub RestartPlayer
     '' Mostrar por pantalla
-    Cls
-    Print "GAME OVER"
+    Shell "cls"
+    PrintImage(gameover_img)
+    ''Print "GAME OVER"
     Sleep kWAIT
 
     '' Reinicio de propiedades
@@ -261,7 +262,7 @@ Sub MainLoop
 
     Do
         '' Limpiar pantalla
-        Cls
+        Shell "cls"
 
         '' Mostrar la clave al usuario
         Print "The word is:", UCase(*key)
@@ -311,6 +312,12 @@ Sub MainLoop
 End Sub
 
 Sub InitGame
+    '' Tamano de la terminal
+    Shell "mode con cols=120 lines=80"
+
+    '' Titulo de la terminal (no va?)
+    Shell "title Contrast Words"
+
     '' Inicializar variables globales del juego
     ReadScore
 
