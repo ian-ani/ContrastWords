@@ -65,7 +65,8 @@ Sub ReadPlayerChoice
 
     Do
         '' Limpiar pantalla
-        Shell "cls"
+        Cls
+        Locate 1,1
 
         '' Mostrar menu principal
         MainMenu
@@ -97,7 +98,8 @@ Sub ExecPlayerChoice(ByVal choice As Integer)
         Input "Press any key... ", tmp
     Case 4
         free_json
-        Shell "cls"
+        Cls
+        Locate 1,1
         PrintImage(goodbye_img)
         Sleep kWAIT * 2
     Case Else
@@ -107,12 +109,14 @@ Sub ExecPlayerChoice(ByVal choice As Integer)
 End Sub
 
 Sub ShowHowToPlay
-    Shell "cls"
+    Cls
+    Locate 1,1
     PrintImage(howto_img)
 End Sub
 
 Sub ShowScore
-    Shell "cls"
+    Cls
+    Locate 1,1
     Print "Username: "; UCase(hiusername)
     Print "Highest streak: "; histreak
     Print "High score: "; hiscore
@@ -215,6 +219,8 @@ Sub PrintImage(ByVal img As String)
             Print txt
         Wend
     Close #F
+
+    Sleep(50)
 End Sub
 
 Sub UpdateScore(ByVal tries_left As Integer)
@@ -239,7 +245,8 @@ End Sub
 
 Sub RestartPlayer
     '' Mostrar por pantalla
-    Shell "cls"
+    Cls
+    Locate 1,1
     PrintImage(gameover_img)
     ''Print "GAME OVER"
     Sleep kWAIT
@@ -262,7 +269,8 @@ Sub MainLoop
 
     Do
         '' Limpiar pantalla
-        Shell "cls"
+        Cls
+        Locate 1,1
 
         '' Mostrar la clave al usuario
         Print "The word is:", UCase(*key)
@@ -313,10 +321,7 @@ End Sub
 
 Sub InitGame
     '' Tamano de la terminal
-    Shell "mode con cols=120 lines=80"
-
-    '' Titulo de la terminal (no va?)
-    Shell "title Contrast Words"
+    Width 120, 80
 
     '' Inicializar variables globales del juego
     ReadScore
