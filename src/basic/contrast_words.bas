@@ -12,6 +12,7 @@ Const wizard_img As String = "wizard.txt"
 Const goodbye_img As String = "goodbye.txt"
 Const howto_img As String = "howto.txt"
 Const gameover_img As String = "gameover.txt"
+Const play_img As String = "play.txt"
 
 '' Variables globales de jugadores (maximas)
 Dim Shared hiscore As Integer = 0
@@ -263,6 +264,9 @@ Sub MainLoop
     Do
         '' Limpiar pantalla
         Shell "cls"
+
+        '' Dibujo de PLAY
+        PrintImage(play_img)
 
         '' Mostrar la clave al usuario
         Print "The word is:", UCase(*key)
