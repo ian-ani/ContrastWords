@@ -89,13 +89,11 @@ Sub ExecPlayerChoice(ByVal choice As Integer)
     Select Case choice
     Case 1
         ShowHowToPlay
-        ''Print ""
         Input "Press any key... ", tmp
     Case 2
         MainLoop
     Case 3
         ShowScore
-        ''Print ""
         Input "Press any key... ", tmp
     Case 4
         free_json
@@ -244,7 +242,6 @@ Sub RestartPlayer
     '' Mostrar por pantalla
     Shell "cls"
     PrintImage(gameover_img)
-    ''Print "GAME OVER"
     Sleep kWAIT
 
     '' Reinicio de propiedades
@@ -340,6 +337,3 @@ End Sub
 
 '' Inicia el juego
 InitGame
-
-'' NOTA: refactorizar un poco algunos bloques que se repiten: MAIN LOOP principalmente lo necesita
-'' NOTA: anadir dibujos
