@@ -12,6 +12,8 @@ Const wizard_img As String = "wizard.txt"
 Const goodbye_img As String = "goodbye.txt"
 Const howto_img As String = "howto.txt"
 Const gameover_img As String = "gameover.txt"
+Const play_img As String = "play.txt"
+Const score_img As String = "score.txt"
 
 '' Variables globales de jugadores (maximas)
 Dim Shared hiscore As Integer = 0
@@ -88,13 +90,11 @@ Sub ExecPlayerChoice(ByVal choice As Integer)
     Select Case choice
     Case 1
         ShowHowToPlay
-        ''Print ""
         Input "Press any key... ", tmp
     Case 2
         MainLoop
     Case 3
         ShowScore
-        ''Print ""
         Input "Press any key... ", tmp
     Case 4
         free_json
@@ -117,6 +117,7 @@ End Sub
 Sub ShowScore
     Cls
     Locate 1,1
+    PrintImage(score_img)
     Print "Username: "; UCase(hiusername)
     Print "Highest streak: "; histreak
     Print "High score: "; hiscore
@@ -248,7 +249,6 @@ Sub RestartPlayer
     Cls
     Locate 1,1
     PrintImage(gameover_img)
-    ''Print "GAME OVER"
     Sleep kWAIT
 
     '' Reinicio de propiedades
@@ -271,6 +271,9 @@ Sub MainLoop
         '' Limpiar pantalla
         Cls
         Locate 1,1
+
+        '' Dibujo de PLAY
+        PrintImage(play_img)
 
         '' Mostrar la clave al usuario
         Print "The word is:", UCase(*key)
@@ -339,6 +342,3 @@ End Sub
 
 '' Inicia el juego
 InitGame
-
-'' NOTA: refactorizar un poco algunos bloques que se repiten: MAIN LOOP principalmente lo necesita
-'' NOTA: anadir dibujos
