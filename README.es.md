@@ -17,7 +17,7 @@ Una palabra aleatoria aparecerá en pantalla, debes escribir al menos un antóni
 - [Cómo jugar](#Cómo-jugar)
 - [Requisitos](#Requisitos)
 - [Probado en](#Probado-en)
-- [Problemas conocidos](#Problemas-conocidos)
+- [Problemas conocidos ❗❗❗](#Problemas-conocidos)
 
 ## Desarrollo y recursos
 
@@ -59,6 +59,6 @@ Write an antonym: synthesis
 
 Funciona tanto en **cmd** como en **PowerShell**.
 
-## Problemas conocidos ❗❗❗
+## Problemas conocidos
 
 Puede que algunos sistemas Windows 11 muestren texto corrupto como *"Choose an option: STREAK===ds!"* o tengan problemas para pintar apropiadamente las imágenes ASCII. Estoy investigándolo.
