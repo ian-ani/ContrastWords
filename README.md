@@ -16,7 +16,7 @@ A random word will appear, you must write at least one antonym. Try to keep your
 - [How to play](#How-to-play)
 - [Requirements](#Requirements)
 - [Tested on](#Tested-on)
-- [Known issues](#Known-issues)
+- [Known issues](#Known-issues-❗❗❗)
 
 ## Development and resources
 
