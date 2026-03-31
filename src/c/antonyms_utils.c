@@ -13,6 +13,9 @@ static cJSON *json_file = NULL;
 
 // Inicializar y guardar el JSON en la variable global
 void init_json(void) {
+    // Generar semilla
+    srand(time(NULL));
+
     // Abrir archivo
     FILE *fp = open_file(kANTONYMS);
 
@@ -44,7 +47,7 @@ FILE *open_file(const char *filename) {
 
     // Si el archivo es nulo (no lo encuentra o lo que sea)
     if (fp == NULL) {
-        printf("Error: Unable to open the file.\n");
+        fprintf(stderr, "Error: Unable to open the file.\n");
     }
 
     return fp;
@@ -96,7 +99,7 @@ cJSON *parse_json(char *buffer) {
         const char *error_ptr = cJSON_GetErrorPtr();
 
         if (error_ptr != NULL) {
-            printf("Error: %s\n", error_ptr);
+            fprintf(stderr, "Error: %s\n", error_ptr);
         }
 
         // Liberar puntero
@@ -128,9 +131,6 @@ int get_number_keys(void) {
 
 // Obtiene una clave aleatoria para que el usuario diga un antonimo de esta
 char *get_random_key(void) {
-    // Generar semilla
-    srand(time(NULL));
-
     // Obtener un indice
     int index = rand() % get_number_keys();
 
