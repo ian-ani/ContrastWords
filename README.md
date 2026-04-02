@@ -17,6 +17,7 @@ A random word will appear, you must write at least one antonym. Try to keep your
 - [Requirements](#Requirements)
 - [Tested on](#Tested-on)
 - [Known issues ❗❗❗](#Known-issues)
+- [Additional notes](#Additional-notes)
 
 ## Development and resources
 
@@ -61,3 +62,7 @@ Works on both **cmd** and **PowerShell**.
 ## Known issues
 
 Some Windows 11 systems may display corrupted text such as *"Choose an option: STREAK===ds!"* or have issues printing ASCII images. I'm investigating it.
+
+## Additional notes
+
+When compiling, you will need the cJSON files (see [Development and resources](#Development-and-resources)). Also, the project structure is a bit rough, so every time you compile the C code, you will need to move any .a file into the Basic folder. The same applies to the resulting .exe and ASCII files.
