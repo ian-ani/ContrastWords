@@ -16,7 +16,7 @@ A random word will appear, you must write at least one antonym. Try to keep your
 - [How to play](#How-to-play)
 - [Requirements](#Requirements)
 - [Tested on](#Tested-on)
-- [Known issues](#Known-issues)
+- [Known issues ❗❗❗](#Known-issues)
 
 ## Development and resources
 
@@ -58,6 +58,6 @@ Write an antonym: synthesis
 
 Works on both **cmd** and **PowerShell**.
 
-## Known issues ❗❗❗
+## Known issues
 
 Some Windows 11 systems may display corrupted text such as *"Choose an option: STREAK===ds!"* or have issues printing ASCII images. I'm investigating it.
