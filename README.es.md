@@ -18,6 +18,7 @@ Una palabra aleatoria aparecerá en pantalla, debes escribir al menos un antóni
 - [Requisitos](#Requisitos)
 - [Probado en](#Probado-en)
 - [Problemas conocidos ❗❗❗](#Problemas-conocidos)
+- [Notas adicionales](#Notas-adicionales)
 
 ## Desarrollo y recursos
 
@@ -62,3 +63,31 @@ Funciona tanto en **cmd** como en **PowerShell**.
 ## Problemas conocidos
 
 Puede que algunos sistemas Windows 11 muestren texto corrupto como *"Choose an option: STREAK===ds!"* o tengan problemas para pintar apropiadamente las imágenes ASCII. Estoy investigándolo.
+
+## Notas adicionales
+
+Al compilar, necesitarás los archivos de cJSON (ver [Desarrollo y recursos](#Desarrollo-y-recursos)). Además, la estructura del proyecto está un poco regular, así que cada vez que se vaya a compilar el código de C, se necesitará mover cualquier archivo .a generado en el directorio de Basic. Lo mismo se aplica con cualquier .exe resultante y los archivos ASCII.
+
+Compilación de C:
+
+```bash
+# Situarse en la carpeta de C
+cd src/c
+
+# Crear archivo .o
+gcc -c antonyms_utils.c -o antonyms_utils.o
+gcc -c ../../libs/cJSON.c -o ../../libs/cJSON.o
+
+# Crear archivo .a
+ar r libantonyms_utils.a antonyms_utils.o ../../libs/cJSON.o
+```
+
+Compilación de Basic:
+
+```cmd
+# Situarse en la carpeta de Basic
+cd src/basic
+
+# Crear .exe
+fbc64 contrast_words.bas
+```
