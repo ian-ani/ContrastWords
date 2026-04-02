@@ -7,6 +7,10 @@
 *.exe
 *.a
 
+# Librerias
+
+libs
+
 # JSON sin formatear
 
 antonyms.json
