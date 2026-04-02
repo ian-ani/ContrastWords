@@ -67,7 +67,7 @@ Some Windows 11 systems may display corrupted text such as *"Choose an option: S
 
 When compiling, you will need the cJSON files (see [Development and resources](#Development-and-resources)). Also, the project structure is a bit rough, so every time you compile the C code, you will need to move any .a file into the Basic folder. The same applies to the resulting .exe and ASCII files.
 
-Compilación de C:
+C compilation:
 
 ```bash
 # Move to C directory
@@ -81,7 +81,7 @@ gcc -c ../../libs/cJSON.c -o ../../libs/cJSON.o
 ar r libantonyms_utils.a antonyms_utils.o ../../libs/cJSON.o
 ```
 
-Compilación de Basic:
+Basic compilation:
 
 ```powershell
 # Move to Basic directory
