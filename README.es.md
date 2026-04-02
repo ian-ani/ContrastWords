@@ -84,7 +84,7 @@ ar r libantonyms_utils.a antonyms_utils.o ../../libs/cJSON.o
 
 Compilación de Basic:
 
-```cmd
+```powershell
 # Situarse en la carpeta de Basic
 cd src/basic
 
